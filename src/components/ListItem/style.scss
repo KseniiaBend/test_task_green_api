@@ -1,8 +1,18 @@
-.avatar-wrapper {
-  width: 40px;
-  height: 40px;
+@import "src/style/index";
 
-  & > img {
-    max-width: 100%;
+.list-item-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-bottom: $border;
+
+  & > .list-item-contact {
+    margin-left: 12px;
+    width: 100%;
   }
+}
+
+.list-item-selected {
+  background: $lightGray;
 }

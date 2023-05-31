@@ -1,0 +1,56 @@
+@import "src/style/index";
+
+.main-grid-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+
+  @media screen and (min-width: $lg) {
+    grid-template-columns: 2fr 5fr;
+  }
+}
+
+.main-contact-list,
+.main-dialog {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-contact-list {
+  gap: 16px;
+  overflow-y: scroll;
+
+  & > .input-wrapper {
+    position: sticky;
+    top: 12px;
+    margin: 0 8px;
+  }
+}
+
+.main-dialog {
+  position: relative;
+  justify-content: flex-end;
+  background: $background;
+  overflow-y: hidden;
+
+  & > .main-dialog-current-contact {
+    padding: 18px 12px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: calc(100% - 24px);
+    background: rgba(255, 255, 255, 0.6);
+    color: forestgreen;
+  }
+
+  & > .input-wrapper {
+    margin: 0 12px 12px;
+  }
+
+  & > .main-dialog-content {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: scroll;
+    height: 100%;
+  }
+}

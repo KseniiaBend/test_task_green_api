@@ -1,0 +1,27 @@
+@import "src/style/index";
+
+.authorization-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  background: $background;
+  height: 100vh;
+
+  & > h1 {
+    color: darkgreen;
+    margin: 0;
+  }
+
+  & > input,
+  & > button {
+    min-width: 40%;
+    @media screen and (min-width: $sm) {
+      min-width: 30%;
+    }
+    @media screen and (min-width: $lg) {
+      min-width: 20%;
+    }
+  }
+}

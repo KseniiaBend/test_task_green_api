@@ -1,0 +1,120 @@
+import React, { useContext, useEffect, useState } from 'react';
+import './style.scss';
+import { AppContext } from '../../App';
+import InputWithIcon from '../../components/InputWithIcon';
+import ListItem from '../../components/ListItem';
+import Message from '../../components/Message';
+
+import { checkStringFormat, generateId } from '../../helpers/general';
+import send from '../../assets/send.png';
+import tick from '../../assets/tick.png';
+import { fetchReceiveNotification, fetchSendMessage } from '../../helpers/fetch';
+
+const Main = () => {
+  const { idInstance, apiTokenInstance } = useContext(AppContext);
+  const [currentContact, setCurrentContact] = useState('');
+  const [contactsList, setContactsList] = useState<string[]>([]);
+  const [addContactValue, setAddContactValue] = useState('');
+  const [sendMessageValue, setSendMessageValue] = useState('');
+  const [currentDialogMessages, setCurrentDialogMessages] = useState<
+    { text: string; isRight: boolean; id: string; current: string }[]
+  >([]);
+
+  const handleOnAddContactChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setAddContactValue(checkStringFormat(e.target.value));
+
+  const handleOnSendMessageChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setSendMessageValue(e.target.value);
+
+  const handleOnAddContactClick = (value: string) => {
+    if (!value) {
+      alert('Please, enter the phone number');
+    } else if (!contactsList.includes(value)) {
+      setContactsList((prev) => [...prev, value]);
+      setAddContactValue('');
+    } else alert('This contact has already existed');
+  };
+
+  const handleOnContactItemClick = (value: string) => {
+    setCurrentContact(value);
+  };
+
+  const handleOnSendMessageClick = async () => {
+    setCurrentDialogMessages((prev) => [
+      ...prev,
+      { id: generateId(), text: sendMessageValue, isRight: true, current: currentContact }
+    ]);
+    setSendMessageValue('');
+
+    const body = {
+      chatId: `${currentContact}@c.us`,
+      message: sendMessageValue
+    };
+    await fetchSendMessage(idInstance, apiTokenInstance, body);
+  };
+
+  useEffect(() => {
+    if (!(idInstance && apiTokenInstance)) return;
+    const f = async () => {
+      const data = await fetchReceiveNotification(idInstance, apiTokenInstance);
+      if (!data) return;
+      const { textMessage, chatId } = data;
+
+      setCurrentDialogMessages((prev) => [
+        ...prev,
+        {
+          id: generateId(),
+          text: textMessage,
+          isRight: false,
+          current: chatId
+        }
+      ]);
+    };
+
+    const intervalId = setInterval(() => f().catch((e) => console.error(e)), 5500);
+    return () => clearInterval(intervalId);
+  }, [apiTokenInstance, idInstance]);
+
+  return (
+    <div className="main-grid-wrapper">
+      <div className="main-contact-list">
+        <InputWithIcon
+          alt="Add contact"
+          icon={tick}
+          placeholder="Add new contact, ex: 7xxxxxxxxxx"
+          onChange={handleOnAddContactChange}
+          onClick={handleOnAddContactClick}
+          value={addContactValue}
+        />
+        {contactsList.map((el) => (
+          <ListItem
+            isSelected={currentContact === el}
+            onClick={handleOnContactItemClick}
+            contact={el}
+            key={el}
+          />
+        ))}
+      </div>
+      <div className="main-dialog">
+        <div className="main-dialog-current-contact">{currentContact || 'Select chat'}</div>
+        <div className="main-dialog-content">
+          {currentDialogMessages
+            .filter(({ current }) => current === currentContact)
+            .map(({ text, id, isRight }) => <Message key={id} text={text} isRight={isRight} />)
+            .reverse()}
+        </div>
+        <InputWithIcon
+          disabled={!currentContact}
+          onChange={handleOnSendMessageChange}
+          onClick={handleOnSendMessageClick}
+          value={sendMessageValue}
+          placeholder="Send a message"
+          icon={send}
+          alt="Send message"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Main;

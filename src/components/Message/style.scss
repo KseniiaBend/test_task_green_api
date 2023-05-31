@@ -1,0 +1,17 @@
+@import "src/style/index";
+
+.message {
+  border: $border;
+  padding: 12px;
+  max-width: 40%;
+  min-width: 20%;
+  width: fit-content;
+  background: white;
+  border-radius: 12px;
+  margin: 12px 24px;
+  overflow-wrap: break-word;
+}
+
+.message-right {
+  align-self: flex-end;
+}

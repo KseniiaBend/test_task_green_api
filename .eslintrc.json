@@ -1,24 +1,39 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "node": true,
+        "es6": true,
+        "es2021": true,
+        "jest": true
     },
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:prettier/recommended"
     ],
-    "overrides": [
-    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": "latest",
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "react-hooks"
     ],
     "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "no-duplicate-imports": "error",
+        "no-unused-vars": "warn"
     }
 }
