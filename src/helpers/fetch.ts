@@ -6,6 +6,8 @@ import {
   sendMessageUrl
 } from '../apiConfig';
 
+let isDeletePending = false;
+
 export const fetchSendMessage = async (
   idInstance: string,
   apiTokenInstance: string,
@@ -36,15 +38,21 @@ const fetchDeleteNotification = async (
   receiptId: string
 ) => {
   if (!(idInstance && apiTokenInstance && receiptId)) return;
+  isDeletePending = true;
   return await fetch(deleteNotificationUrl(idInstance, apiTokenInstance, receiptId), {
     method: DELETE
-  }).catch((err) => {
-    console.error(err);
-  });
+  })
+    .catch((err) => {
+      console.error(err);
+    })
+    .finally(() => {
+      isDeletePending = false;
+    });
 };
 
 export const fetchReceiveNotification = async (idInstance: string, apiTokenInstance: string) => {
-  if (!(idInstance && apiTokenInstance)) return;
+  if (!(idInstance && apiTokenInstance) || isDeletePending) return;
+
   return await fetch(receiveNotificationUrl(idInstance, apiTokenInstance))
     .then((response) => {
       if (response.status === 200) return response.json();
@@ -67,7 +75,6 @@ export const fetchReceiveNotification = async (idInstance: string, apiTokenInsta
       return textMessage && chatId ? { textMessage, chatId: chatId.slice(0, -5) } : null;
     })
     .catch((err) => {
-      alert(`Error: Not delivered (${err.message})`);
       console.error(err);
     });
 };

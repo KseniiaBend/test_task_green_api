@@ -40,17 +40,20 @@ const Main = () => {
   };
 
   const handleOnSendMessageClick = async () => {
-    setCurrentDialogMessages((prev) => [
-      ...prev,
-      { id: generateId(), text: sendMessageValue, isRight: true, current: currentContact }
-    ]);
-    setSendMessageValue('');
-
     const body = {
       chatId: `${currentContact}@c.us`,
       message: sendMessageValue
     };
-    await fetchSendMessage(idInstance, apiTokenInstance, body);
+    if (!sendMessageValue) return;
+
+    const response = await fetchSendMessage(idInstance, apiTokenInstance, body);
+    if (response) {
+      setCurrentDialogMessages((prev) => [
+        ...prev,
+        { id: generateId(), text: sendMessageValue, isRight: true, current: currentContact }
+      ]);
+      setSendMessageValue('');
+    }
   };
 
   useEffect(() => {
