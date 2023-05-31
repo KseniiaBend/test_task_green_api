@@ -2,7 +2,11 @@
 
 .main-grid-wrapper {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr;
+
+  @media screen and (min-width: $md) {
+    grid-template-columns: 1fr 2fr;
+  }
 
   @media screen and (min-width: $lg) {
     grid-template-columns: 2fr 5fr;
@@ -34,7 +38,7 @@
   overflow-y: hidden;
 
   & > .main-dialog-current-contact {
-    padding: 18px 12px;
+    padding: 19px 12px;
     position: absolute;
     right: 0;
     top: 0;
@@ -44,7 +48,11 @@
   }
 
   & > .input-wrapper {
-    margin: 0 12px 12px;
+    margin: 0 12px 24px;
+
+    @media screen and (min-width: $md) {
+      margin-bottom: 12px;
+    }
   }
 
   & > .main-dialog-content {
