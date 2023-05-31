@@ -78,6 +78,14 @@ const Main = () => {
     return () => clearInterval(intervalId);
   }, [apiTokenInstance, idInstance]);
 
+  useEffect(() => {
+    if (currentDialogMessages.length) {
+      currentDialogMessages.forEach(({ current }) => {
+        if (!contactsList.includes(current)) setContactsList((prev) => [...prev, current]);
+      });
+    }
+  }, [contactsList.length, currentDialogMessages.length]);
+
   return (
     <div className="main-grid-wrapper">
       <div className="main-contact-list">
