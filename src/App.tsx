@@ -9,10 +9,9 @@ function App() {
   const [apiTokenInstance, setApiTokenInstance] = useState('');
   const [isAuth, setIsAuth] = useState(false);
 
-  const handleOnIdChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setIdInstance(e.target.value);
-  const handleOnApiChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setApiTokenInstance(e.target.value);
+  const handleChange =
+    (setState: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) =>
+      setState(e.target.value);
 
   const handleIsAuth = () => {
     if (apiTokenInstance && idInstance) setIsAuth(true);
@@ -30,8 +29,8 @@ function App() {
           onClick={handleIsAuth}
           idInstance={idInstance}
           apiTokenInstance={apiTokenInstance}
-          onIdChange={handleOnIdChange}
-          onApiChange={handleOnApiChange}
+          onIdChange={handleChange(setIdInstance)}
+          onApiChange={handleChange(setApiTokenInstance)}
         />
       )}
     </>

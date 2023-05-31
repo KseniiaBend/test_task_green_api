@@ -20,13 +20,12 @@ const Main = () => {
     { text: string; isRight: boolean; id: string; current: string }[]
   >([]);
 
-  const handleOnAddContactChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setAddContactValue(checkStringFormat(e.target.value));
+  const handleChange =
+    (setState: (value: string) => void, validate: boolean) =>
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      validate ? setState(checkStringFormat(e.target.value)) : setState(e.target.value);
 
-  const handleOnSendMessageChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setSendMessageValue(e.target.value);
-
-  const handleOnAddContactClick = (value: string) => {
+  const handleAddContactClick = (value: string) => {
     if (!value) {
       alert('Please, enter the phone number');
     } else if (!contactsList.includes(value)) {
@@ -35,11 +34,11 @@ const Main = () => {
     } else alert('This contact has already existed');
   };
 
-  const handleOnContactItemClick = (value: string) => {
+  const handleContactItemClick = (value: string) => {
     setCurrentContact(value);
   };
 
-  const handleOnSendMessageClick = async () => {
+  const handleSendMessageClick = async () => {
     const body = {
       chatId: `${currentContact}@c.us`,
       message: sendMessageValue
@@ -93,14 +92,14 @@ const Main = () => {
           alt="Add contact"
           icon={tick}
           placeholder="Add new contact, ex: 7xxxxxxxxxx"
-          onChange={handleOnAddContactChange}
-          onClick={handleOnAddContactClick}
+          onChange={handleChange(setAddContactValue, true)}
+          onClick={handleAddContactClick}
           value={addContactValue}
         />
         {contactsList.map((el) => (
           <ListItem
             isSelected={currentContact === el}
-            onClick={handleOnContactItemClick}
+            onClick={handleContactItemClick}
             contact={el}
             key={el}
           />
@@ -116,8 +115,8 @@ const Main = () => {
         </div>
         <InputWithIcon
           disabled={!currentContact}
-          onChange={handleOnSendMessageChange}
-          onClick={handleOnSendMessageClick}
+          onChange={handleChange(setSendMessageValue, false)}
+          onClick={handleSendMessageClick}
           value={sendMessageValue}
           placeholder="Send a message"
           icon={send}

@@ -9,11 +9,11 @@ interface IListItem {
 }
 
 const ListItem = ({ contact, onClick, isSelected = false }: IListItem) => {
-  const handleOnClick = () => onClick(contact);
+  const handleClick = () => onClick(contact);
 
   return (
     <div
-      onClick={handleOnClick}
+      onClick={handleClick}
       className={`list-item-wrapper ${isSelected ? 'list-item-selected' : ''}`}>
       <Avatar />
       <div className="list-item-contact">{contact}</div>

@@ -20,25 +20,25 @@ const InputWithIcon = ({
   onClick,
   disabled = false
 }: IInput) => {
-  const handleOnClick = () => {
+  const handleClick = () => {
     onClick(value);
   };
 
-  const handleOnKeyPress = (e: { key: string }) => {
+  const handleKeyPress = (e: { key: string }) => {
     if (e.key === 'Enter') onClick(value);
   };
 
   return (
     <div className="input-wrapper">
       <input
-        onKeyPress={handleOnKeyPress}
+        onKeyPress={handleKeyPress}
         disabled={disabled}
         placeholder={placeholder}
         type="text"
         onChange={onChange}
         value={value}
       />
-      <button onClick={handleOnClick} className="input-image-button">
+      <button onClick={handleClick} className="input-image-button">
         <img src={icon} alt={alt} />
       </button>
     </div>
