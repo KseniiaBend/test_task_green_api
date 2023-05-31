@@ -1,0 +1,12 @@
+.input-wrapper {
+  display: flex;
+  align-items: center;
+
+  & > .input-image-wrapper {
+    width: 20px;
+    height: 20px;
+    & > img {
+      max-width: 100%;
+    }
+  }
+}
