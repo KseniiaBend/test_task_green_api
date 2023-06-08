@@ -57,7 +57,7 @@ const Main = () => {
 
   useEffect(() => {
     if (!(idInstance && apiTokenInstance)) return;
-    const f = async () => {
+    const getReceiveNotification = async () => {
       const data = await fetchReceiveNotification(idInstance, apiTokenInstance);
       if (!data) return;
       const { textMessage, chatId } = data;
@@ -73,7 +73,10 @@ const Main = () => {
       ]);
     };
 
-    const intervalId = setInterval(() => f().catch((e) => console.error(e)), 5500);
+    const intervalId = setInterval(
+      () => getReceiveNotification().catch((e) => console.error(e)),
+      5500
+    );
     return () => clearInterval(intervalId);
   }, [apiTokenInstance, idInstance]);
 

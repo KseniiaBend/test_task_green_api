@@ -67,10 +67,8 @@ export const fetchReceiveNotification = async (idInstance: string, apiTokenInsta
       deleteNotification().catch((e) => console.error(e));
 
       const { body } = response;
-      const { messageData, senderData } = body;
-      const { textMessageData } = messageData || {};
-      const { textMessage } = textMessageData || {};
-      const { chatId } = senderData || {};
+      const { textMessage } = body?.messageData?.textMessageData || {};
+      const { chatId } = body?.senderData || {};
 
       return textMessage && chatId ? { textMessage, chatId: chatId.slice(0, -5) } : null;
     })
